@@ -60,7 +60,7 @@
       }
     }
  
-    function pridetiIranki() {
+    function pridetiKlienta() {
     
       var valid = true;
       allFields.removeClass( "ui-state-error" );
@@ -88,7 +88,7 @@
       width: 450,
       modal: true,
       buttons: {
-        "Saugoti": pridetiIranki,
+        "Saugoti": pridetiKlienta,
         Cancel: function() {
           dialog.dialog( "close" );
         }
@@ -128,32 +128,38 @@
 				<th>Tipas</th>
 				<th>Pavadinimas</th>
 				<th>Kontaktai</th>
+				<th>Priskirti įrankius</th>
 			</tr>
 			<tr th:each = "klientas: ${klientai}">
-				<td th:text="${irankis.getId}" style="display:none;"></td>
-				
-				<td th:text="${irankis.getTipas}"></td>
-				<td th:text="${irankis.getPavadinimas}"></td>
-				<td th:text="${irankis.getKontaktai}"></td>
+				<td th:text="${klientas.getTipas}"></td>
+				<td th:text="${klientas.getPavadinimas}"></td>
+				<td th:text="${klientas.getKontaktai}"></td>
+				<td><a th:href="@{/irankiai/(klientas_id=${klientas.getId})}">Pasirinkti</a></td>
 			</tr>
 		</table>
 		 <button id="kliento-dialogas">Nauja</button>
 	</div>	
 	
-	<div id="dialog-confirm">
-	  	<p>
-	  		<span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
-	  		<fieldset>
-				<label class="inf">Tipas</label>
-				<span class="inp_field" id="inf_tipas"></span>	
+	<div id="data_form" title="Klientu duomenys">
+		<form action="" method="POST">
+			<fieldset>
+			<label for="tipas">Tipas</label>
+			<select name="tipas" id="tipas">
+			  <option value="Fizinis">Fizinis</option>
+			  <option value="Juridinis">Juridinis</option>
+		  	</select>
+			
+			<label for="pavadinimas">Pavadinimas</label>
+			<input type="text" name="pavadinimas" id="pavadinimas" value="">			
+			
+			<label for="kontaktai">Kontaktai</label>	
+			<textarea name="kontaktai" id="kontaktai"></textarea>
+	
+			<input type="hidden" name="id" id="id" value="0">
 				
-				<label class="inf">Pavadinimas</label>	
-				<span  class="inp_field" id="inf_pavadinimas"></span>
-				
-				<label class="inf">Kontaktai</label>	
-				<p id="inf_aprasymas"></p>
+			<input type="hidden" name="saugoti" value="saugoti">
 			</fieldset>
-	  	</p>
+		</form>
 	</div>
 	
 </body>

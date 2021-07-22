@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Ataskaita kortelė</title>
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	
+	
+</head>
+<body>
+	<div id="forma">
+		<h3>Irankiai: </h3>
+		<table id = "vireju_lentele">
+			<tr>
+				<th style="display:none">Id</th>
+					 	 	 	 	 	
+				<th>Tipas</th>
+				<th>Inventoriaus numeris</th>
+				<th>Isigijimo data</th>
+				<th>Kaina</th>
+				<th>Pavadinimas</th>
+				<th>Nuomos kaina </th>
+			</tr>
+			<tr th:each = "irankis: ${irankiai}">
+				<td th:text="${irankis.getId}" style="display:none;"></td>
+				
+				<td th:text="${irankis.getTipas}"></td>
+				<td th:text="${irankis.getInventoriaus_numeris}"></td>
+				<td th:text="${irankis.getIsigijimo_data}"></td>
+				<td th:text="${irankis.getKaina}"></td>
+				<td th:text="${irankis.getPavadinimas}"></td>
+				<td th:text="${irankis.getNuomos_kaina}"></td>
+			</tr>
+		</table>
+		 <button type="button" id="create_equipment">Sukurti nauja</button> 
+	</div>	
+	
+
+	
+</body>
+</html>
