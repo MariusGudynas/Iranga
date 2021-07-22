@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Irankiu kortelė</title>
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<style>
+		label, input, .inp_field { display:block; }
+		input.text { margin-bottom:12px; width:95%; padding: .4em; }
+		fieldset { padding:0; border:0; margin-top:25px; }
+		h1 { font-size: 1.2em; margin: .6em 0; }
+		div#users-contain { width: 350px; margin: 20px 0; }
+		div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+		div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; padding: 0.3em; }
+	</style>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>
+  
+  $( function() {
+    var dialog, form,
+     	   
+      // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
+      pav = $( "#pav" ),
+      flag_skirtas_galutiniam_vartojimui = $( "#flag_skirtas_galutiniam_vartojimui" ),
+      vnt_mato = $( "#vnt_mato" ),
+      kiekis = $( "#kiekis" ),
+      kaina_uz_kiekio_vnt =  $( "#kaina_uz_kiekio_vnt" ),
+      aprasymas =  $( "#aprasymas" ),
+      allFields = $( [] ).add( pav ).add( flag_skirtas_galutiniam_vartojimui ).add( vnt_mato ).add ( kiekis ).add ( kaina_uz_kiekio_vnt ).add ( aprasymas ) ,
+      tips = $( ".validateTips" );
+ 
+    function updateTips( t ) {
+      tips
+        .text( t )
+        .addClass( "ui-state-highlight" );
+      setTimeout(function() {
+        tips.removeClass( "ui-state-highlight", 1500 );
+      }, 500 );
+    }
+ 
+    function checkLength( o, n, min, max ) {
+      if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+          min + " and " + max + "." );
+        return false;
+      } else {
+        return true;
+      }
+    }
+ 
+    function checkRegexp( o, regexp, n ) {
+      if ( !( regexp.test( o.val() ) ) ) {
+        o.addClass( "ui-state-error" );
+        updateTips( n );
+        return false;
+      } else {
+        return true;
+      }
+    }
+ 
+    function pridetiIranki() {
+    
+      var valid = true;
+      allFields.removeClass( "ui-state-error" );
+      
+       	  // id pav flag_skirtas_galutiniam_vartojimui vnt_mato kiekis kaina_uz_kiekio_vnt aprasymas
+      
+ 
+      valid = valid && checkLength( pav, "Pavadinimas", 3, 255 );
+      valid = valid && checkLength( flag_skirtas_galutiniam_vartojimui, "Skirtas galutiniam vartojimui", 1, 1 );
+      valid = valid && checkLength( vnt_mato, "Mato vnt.", 1, 255 );
+      valid = valid && checkLength( kiekis, "Kiekis", 1, 255 );     
+      valid = valid && checkLength( kaina_uz_kiekio_vnt, "Kaina už kiekio vnt.", 1, 12 );
+      valid = valid && checkLength( aprasymas, "Aprašymas", 10, 2000 );      
+                
+ 
+      valid = valid && checkRegexp( pav, /^[A-ZĄČĘĖĮŠŲŪŽ]([0-9a-ząčęėįšųūž_\s])+$/i, "Pavadinime turi būti a-z ąčęėįšųūž, 0-9, pabraukimai, tarpai ir turi prasidėti didžąją raide" );
+      valid = valid && checkRegexp( vnt_mato, /^[a-ząčęėįšųūžA-ZĄČĘĖĮŠŲŪŽ]([0-9a-ząčęėįšųūž_\s])+$/i, "Mato vnt.  turi būti a-z ąčęėįšųūž, 0-9, pabraukimai, tarpai ir turi prasidėti didžąją raide" );      
+      valid = valid && checkRegexp( kiekis, /^([0-9.eE+-])+$/, "Kiekyje gali būti : 0-9 . eE+-" );
+      valid = valid && checkRegexp( kaina_uz_kiekio_vnt, /^([0-9.])+$/, "Kiekyje gali būti : 0-9 ." );      
+ 
+      if ( valid ) {
+      
+      	form.submit();
+        dialog.dialog( "close" );
+      }
+      return valid;
+    }
+ 
+    dialog = $( "#data_form" ).dialog({
+      autoOpen: false,
+      height: 500,
+      width: 450,
+      modal: true,
+      buttons: {
+        "Saugoti": pridetiIranki,
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+      },
+      close: function() {
+        form[ 0 ].reset();
+        allFields.removeClass( "ui-state-error" );
+      }
+    });
+ 
+    form = dialog.find( "form" );
+ 
+    $( "#irankio-dialogas" ).button().on( "click", function() {
+      dialog.dialog( "open" );
+    });
+    
+     dialog_msg = $( "#dialog-message" ).dialog({
+      autoOpen: false,     
+      modal: true,
+      buttons: {
+        Gerai: function() {
+          $( this ).dialog( "close" );
+          location.reload();
+        }
+      }
+    });   
+  });
+  </script>
+</head>
+<body>
+	<div id="forma">
+		<h3>Irankiai: </h3>
+		<table id = "vireju_lentele">
+			<tr>
+				<th style="display:none">Id</th>
+					 	 	 	 	 	
+				<th>Tipas</th>
+				<th>Inventoriaus numeris</th>
+				<th>Isigijimo data</th>
+				<th>Kaina</th>
+				<th>Pavadinimas</th>
+				<th>Nuomos kaina </th>
+			</tr>
+			<tr th:each = "irankis: ${irankiai}">
+				<td th:text="${irankis.getId}" style="display:none;"></td>
+				
+				<td th:text="${irankis.getTipas}"></td>
+				<td th:text="${irankis.getInventoriaus_numeris}"></td>
+				<td th:text="${irankis.getIsigijimo_data}"></td>
+				<td th:text="${irankis.getKaina}"></td>
+				<td th:text="${irankis.getPavadinimas}"></td>
+				<td th:text="${irankis.getNuomos_kaina}"></td>
+			</tr>
+		</table>
+		 <button type="button" id="create_equipment">Sukurti nauja</button> 
+	</div>	
+	
+	<div id="dialog-confirm" title="Įrašo šalinimas?">
+	  	<p>
+	  		<span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+	  		<fieldset>
+				<label class="inf">Tipas</label>
+				<span class="inp_field" id="inf_tipas"></span>	
+
+				<label class="inf">Inventoriaus numeris</label>
+				<span  class="inp_field" id="inf_inventoriaus_numeris"></span>			
+				
+				<label class="inf">Isigijimo data</label>	
+				<span  class="inp_field" id="inf_isigijimo_data"></span>
+				
+				<label class="inf">Kaina</label> 
+				<span  class="inp_field" id="inf_kaina"></span>
+				
+				<label class="inf">Pavadinimas</label>	
+				<span  class="inp_field" id="inf_pavadinimas"></span>
+				
+				<label class="inf">Nuomos kaina</label>	
+				<span  class="inp_field" id="inf_nuomos_kaina"></span>
+			</fieldset>
+	  	</p>
+	</div>
+	
+</body>
+</html>
