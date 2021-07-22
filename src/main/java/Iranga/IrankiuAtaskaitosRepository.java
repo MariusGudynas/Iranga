@@ -22,10 +22,10 @@ public class IrankiuAtaskaitosRepository {
 		  	String top_nuomoti =
 		  				
 		  			"SELECT  "
-		  			+ "*,  "
+		  			+ "i.pavadinimas,  "
 		  			+ "COUNT(*) AS total_count, "
-		  		    + "SUM(CASE WHEN k.tipas = 'Fizinis' THEN 1 END) AS fizinis_count, "
-		  		    + "SUM(CASE WHEN k.tipas = 'Juridinis' THEN 1 END) AS juridinis_count "
+		  		    + "SUM(CASE WHEN k.tipas = 'Fizinis' THEN 1 ELSE 0 END) AS fizinis_count, "
+		  		    + "SUM(CASE WHEN k.tipas = 'Juridinis' THEN 1 ELSE 0 END) AS juridinis_count "
 		  		    + "FROM irankiai i "
 		  		    + "RIGHT JOIN nuoma n ON n.irankiai_id = i.id "
 		  		    + "INNER JOIN klientai k ON k.id = n.klientai_id "

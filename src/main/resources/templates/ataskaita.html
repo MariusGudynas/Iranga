@@ -10,30 +10,21 @@
 </head>
 <body>
 	<div id="forma">
-		<h3>Irankiai: </h3>
-		<table id = "vireju_lentele">
+		<h3>Nuomojama įranga: </h3>
+		<table id = "ataskaita">
 			<tr>
-				<th style="display:none">Id</th>
-					 	 	 	 	 	
-				<th>Tipas</th>
-				<th>Inventoriaus numeris</th>
-				<th>Isigijimo data</th>
-				<th>Kaina</th>
 				<th>Pavadinimas</th>
-				<th>Nuomos kaina </th>
+				<th>Iš viso</th>
+				<th>Fiziniai asmenys nuomojo %</th>
+				<th>Juridiniai asmenys nuomojo %</th>
 			</tr>
-			<tr th:each = "irankis: ${irankiai}">
-				<td th:text="${irankis.getId}" style="display:none;"></td>
-				
-				<td th:text="${irankis.getTipas}"></td>
-				<td th:text="${irankis.getInventoriaus_numeris}"></td>
-				<td th:text="${irankis.getIsigijimo_data}"></td>
-				<td th:text="${irankis.getKaina}"></td>
-				<td th:text="${irankis.getPavadinimas}"></td>
-				<td th:text="${irankis.getNuomos_kaina}"></td>
+			<tr th:each = "irankis: ${irankiai_visi}">
+				<td th:text="${irankis[0]}"></td>
+				<td th:text="${irankis[1]}"></td>
+				<td th:text="${irankis[2]}/${irankis[1]}"></td>
+				<td th:text="${irankis[3]}/${irankis[1]}"></td>
 			</tr>
 		</table>
-		 <button type="button" id="create_equipment">Sukurti nauja</button> 
 	</div>	
 	
 

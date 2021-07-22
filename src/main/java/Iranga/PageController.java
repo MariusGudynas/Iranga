@@ -8,12 +8,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.persistence.EntityManagerFactory;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 @Controller
 public class PageController {
 	
 	@Autowired
 	private KlientaiRepository klientai_repository;	
+	
+	@Autowired 
+	EntityManagerFactory factory;
+	
+	public SessionFactory sessionFactory() {
+
+		
+        if (factory.unwrap(SessionFactory.class) == null) {
+            throw new NullPointerException("factory is not a hibernate factory");
+        }
+        return factory.unwrap(SessionFactory.class);
+}
 
 //	@RequestMapping(path="/klientai", method={ RequestMethod.GET, RequestMethod.POST })
 //	public String Kliantas(
@@ -75,5 +91,21 @@ public class PageController {
 		model.addAttribute("klientai", klientai_repository.findAll() );
 		
 		return "klientai";
+	}
+	
+	@RequestMapping(path="/ataskaita", method={ RequestMethod.GET, RequestMethod.POST })
+	public String recipeReport ( Model model)
+	{
+		Iterable<IrankiuAtaskaita> irankiai_visi;
+		
+		Session session = this.sessionFactory().openSession();
+		IrankiuAtaskaitosRepository irankiu_repositorija =  new IrankiuAtaskaitosRepository( session );
+		
+		irankiai_visi = irankiu_repositorija.recipePriceRange();
+		
+		model.addAttribute("irankiai_visi", irankiai_visi);
+		
+		return "ataskaita";
+		
 	}
 }
